@@ -91,7 +91,7 @@ namespace VortexKarts.AI
         {
             if (kart == null || kart.Stats == null || track == null || tracker == null) return;
             var race = RaceManager.Instance;
-            if (race != null && race.State != RaceState.Racing)
+            if (race != null && race.State != RaceState.Racing && race.State != RaceState.Finished)
             {
                 var idle = KartInputState.Empty;
                 // Rev during countdown for flavour, no movement (InputLocked handles it).

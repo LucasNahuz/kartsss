@@ -4,10 +4,11 @@ Fuente de verdad del estado del proyecto. Actualizado: 2026-09-03.
 
 ## Contexto importante
 
-- El código fue escrito **sin Unity ni .NET SDK instalados en la máquina de desarrollo**. Ningún archivo fue compilado ni ejecutado todavía.
-- Primer paso obligatorio del usuario: instalar Unity Hub + Unity 6000.0.x LTS (o 6.3 LTS) con el módulo Windows Build Support, abrir la carpeta del proyecto y revisar la consola.
-- Al abrir el proyecto por primera vez, `KartVRProjectSetup` corre solo (URP, OpenXR, capas, escenas en Build Settings, assets de datos). También está en el menú `Vortex Karts > Setup Project (all steps)`.
-- Es esperable que haya errores de compilación menores por APIs escritas de memoria; están señalados abajo los puntos con más riesgo.
+- Unity 6000.0.83f1 instalado en `C:\Program Files\Unity\Hub\Editor\6000.0.83f1` (2026-09-03). El proyecto **compila sin errores** y el setup (URP, OpenXR con 6 perfiles, capas, datos, escenas) corrió correctamente.
+- Build Windows de desarrollo verificado: `Builds/Dev/VortexKartsVR.exe` (menú `Vortex Karts > Build`, o `-executeMethod VortexKarts.EditorTools.KartVRBuild.BuildWindowsDev`).
+- Verificación automatizada sin visor (modo escritorio): `VortexKartsVR.exe -autorace neon_metro -autopilot -topdown 120 -screenshots 30,100 -quitafter 300`. El piloto automático completó las 3 vueltas de Metro Neón: **2º de 8, 3:44, mejor vuelta 71,1 s**, cero excepciones, récord guardado en `records.json`.
+- Hooks de línea de comandos: `-autorace <trackId>`, `-autopilot`, `-topdown [altura]`, `-screenshots s1,s2`, `-quitafter s`. Telemetría `[Telemetry]` cada 5 s en el log con `-autopilot`.
+- Todavía **no probado con headset** (esta PC no tiene runtime OpenXR): el juego detecta la ausencia y cae en modo escritorio correctamente.
 
 ## COMPLETADO (implementado, pendiente de verificación en Unity)
 
@@ -53,18 +54,14 @@ Fuente de verdad del estado del proyecto. Actualizado: 2026-09-03.
 ### Debug
 - `DebugRacePanel` (F1, sólo editor/dev build): vueltas, teletransporte a posición, dar power-up, reset, IA on/off, time scale, dibujar waypoints/línea/checkpoints.
 
-## EN DESARROLLO / A VERIFICAR EN UNITY
+## EN DESARROLLO / A VERIFICAR
 
-1. Compilación completa. Puntos con más riesgo de API:
-   - `UniversalRenderPipelineAsset.Create(rendererData)` y creación de `UniversalRendererData` en `KartVRProjectSetup`.
-   - APIs de XR Management en editor (`XRGeneralSettingsPerBuildTarget.SettingsForBuildTarget`, `XRPackageMetadataStore.AssignLoader`) y OpenXR (`OpenXRSettings.GetSettingsForBuildTargetGroup`, nombres de perfiles de interacción).
-   - `InputSystemUIInputModule.AssignDefaultActions()`, `TrackedPoseDriver` del Input System.
-   - `Physics.OverlapSphereNonAlloc`, `Rigidbody.linearVelocity/linearDamping`, `PhysicsMaterial` (nombres Unity 6).
-2. Sensación de manejo: valores de `KartStats`, grip, drift slide (`0.28` en `KartController`), tasas de giro. Ajustar en pista vacía primero (criterio §46).
-3. Geometría de las 3 pistas: puede haber cruces o pendientes bruscas entre puntos de control; revisar con el panel de debug (línea de carrera) y ajustar `DefaultContent`.
-4. Tiempos por vuelta objetivo (60–80 / 70–100 / ~80 s).
-5. Rendimiento VR (72–90 FPS): draw calls de decoración, sombras, partículas; el static batching ya está aplicado.
-6. Volante VR: probar la conversión de espacio de tracking a mundo (`CameraOffset`).
+1. **Prueba con headset real** (Quest Link / SteamVR): recentrado, altura del asiento, confort, volante VR (`CameraOffset` → mundo), rendimiento 72–90 FPS.
+2. **Sensación de manejo con un humano al mando**: hasta ahora sólo condujo la IA. Ajustar `KartStats`, grip, drift slide (`0.18`) y tasas de giro en pista vacía (criterio §46).
+3. Cañón Solar y Sky Lab: carreras automatizadas en curso; la mina del cañón se rediseñó porque cruzaba la ruta principal.
+4. IA en horquillas: todavía roza la pared exterior en la horquilla de Metro Neón (telemetría lat ≈ ±6 con ancho 13).
+5. Rendimiento: medir draw calls de decoración, sombras y partículas en VR.
+6. Probar menú principal, configuración, pausa y resultados con gamepad real (la lógica corrió, pero la navegación no se ejercitó de forma automatizada).
 
 ## PENDIENTE
 
