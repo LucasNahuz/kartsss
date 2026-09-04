@@ -1,0 +1,248 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 695481921c1d596e2c99b85aa65fe8fc, type: 3}
+  m_Name: sky_lab
+  m_EditorClassIdentifier: 
+  id: sky_lab
+  displayName: Sky Lab
+  sceneName: Track_SkyLab
+  theme: 2
+  difficultyLabel: MEDIA / ALTA
+  description: Laboratorio flotante sobre las nubes. Plataformas sin bordes, un tubo
+    de gravedad y turbinas.
+  sortOrder: 2
+  laps: 3
+  expectedLapSeconds: 78
+  controlPoints:
+  - position: {x: 0, y: 0, z: -70}
+    width: 12
+    flags: 0
+  - position: {x: 0, y: 2, z: 30}
+    width: 12
+    flags: 0
+  - position: {x: 0, y: 5, z: 130}
+    width: 12
+    flags: 128
+  - position: {x: -25, y: 8, z: 200}
+    width: 11
+    flags: 16
+  - position: {x: -80, y: 11, z: 240}
+    width: 11
+    flags: 6
+  - position: {x: -150, y: 14, z: 235}
+    width: 11
+    flags: 6
+  - position: {x: -200, y: 17, z: 185}
+    width: 11
+    flags: 0
+  - position: {x: -210, y: 20, z: 115}
+    width: 10
+    flags: 22
+  - position: {x: -180, y: 23, z: 55}
+    width: 10
+    flags: 6
+  - position: {x: -120, y: 26, z: 30}
+    width: 11
+    flags: 32
+  - position: {x: -60, y: 28, z: 35}
+    width: 11
+    flags: 1
+  - position: {x: 10, y: 26, z: 60}
+    width: 12
+    flags: 0
+  - position: {x: 80, y: 24, z: 100}
+    width: 12
+    flags: 8
+  - position: {x: 150, y: 22, z: 120}
+    width: 12
+    flags: 8
+  - position: {x: 220, y: 20, z: 110}
+    width: 12
+    flags: 0
+  - position: {x: 275, y: 18, z: 60}
+    width: 11
+    flags: 22
+  - position: {x: 285, y: 15, z: -10}
+    width: 11
+    flags: 6
+  - position: {x: 270, y: 11, z: -80}
+    width: 11
+    flags: 16
+  - position: {x: 235, y: 8, z: -135}
+    width: 11
+    flags: 0
+  - position: {x: 185, y: 8, z: -165}
+    width: 11
+    flags: 32
+  - position: {x: 120, y: 7, z: -185}
+    width: 11
+    flags: 0
+  - position: {x: 55, y: 6, z: -205}
+    width: 11
+    flags: 22
+  - position: {x: 0, y: 4, z: -240}
+    width: 11
+    flags: 134
+  - position: {x: -60, y: 3, z: -250}
+    width: 11
+    flags: 0
+  - position: {x: -120, y: 2, z: -235}
+    width: 11
+    flags: 16
+  - position: {x: -175, y: 1, z: -210}
+    width: 10
+    flags: 22
+  - position: {x: -200, y: 0, z: -160}
+    width: 10
+    flags: 6
+  - position: {x: -185, y: 0, z: -110}
+    width: 11
+    flags: 0
+  - position: {x: -140, y: 0, z: -92}
+    width: 11
+    flags: 32
+  - position: {x: -85, y: 0, z: -100}
+    width: 11
+    flags: 0
+  - position: {x: -42, y: 0, z: -108}
+    width: 11
+    flags: 0
+  - position: {x: -12, y: 0, z: -95}
+    width: 12
+    flags: 0
+  shortcuts:
+  - name: Pasarela de servicio
+    entryPointIndex: 14
+    exitPointIndex: 18
+    waypoints:
+    - {x: 240, y: 17, z: 50}
+    - {x: 245, y: 13, z: -20}
+    - {x: 240, y: 10, z: -90}
+    width: 6
+    wallsEnabled: 0
+    isTunnel: 0
+    aiPreference: 0.45
+    aiSpeedFraction: 0.8
+  boostPads:
+  - placement:
+      segmentIndex: 9
+      t: 0.6
+      lateralOffset: 0
+    length: 6
+    width: 8
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  - placement:
+      segmentIndex: 19
+      t: 0.3
+      lateralOffset: -2.5
+    length: 6
+    width: 4
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  - placement:
+      segmentIndex: 19
+      t: 0.3
+      lateralOffset: 2.5
+    length: 6
+    width: 4
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  - placement:
+      segmentIndex: 28
+      t: 0.4
+      lateralOffset: 0
+    length: 6
+    width: 7
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  powerUpRows:
+  - placement:
+      segmentIndex: 1
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 5
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 11
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 14
+      t: 0.3
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 18
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 23
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 28
+      t: 0.6
+      lateralOffset: 0
+    count: 4
+  hazards:
+  - type: 0
+    placement:
+      segmentIndex: 13
+      t: 0.5
+      lateralOffset: 0
+    size: 4
+    strength: 1.4
+    range: 6
+  - type: 1
+    placement:
+      segmentIndex: 20
+      t: 0.5
+      lateralOffset: 0
+    size: 10
+    strength: 6
+    range: 16
+  nodeSpacing: 4
+  checkpointSpacing: 110
+  gapLength: 16
+  kickerHeight: 1.3
+  wallHeight: 1.4
+  tunnelHeight: 6.5
+  killY: -30
+  hasGroundPlane: 0
+  groundPlaneY: -60
+  skyColor: {r: 0.35, g: 0.6, b: 1, a: 1}
+  horizonColor: {r: 0.8, g: 0.9, b: 1, a: 1}
+  fogColor: {r: 0.75, g: 0.85, b: 1, a: 1}
+  fogDensity: 0.0015
+  sunColor: {r: 1, g: 1, b: 1, a: 1}
+  sunIntensity: 1.1
+  sunDirection: {x: 55, y: 20, z: 0}
+  ambientColor: {r: 0.6, g: 0.7, b: 0.85, a: 1}
+  roadColor: {r: 0.85, g: 0.88, b: 0.92, a: 1}
+  roadEdgeColor: {r: 0.2, g: 0.6, b: 1, a: 1}
+  wallColor: {r: 0.75, g: 0.8, b: 0.9, a: 1}
+  accentColor: {r: 0.3, g: 1, b: 0.8, a: 1}
+  groundColor: {r: 0.9, g: 0.95, b: 1, a: 1}
+  tips:
+  - "Muchas plataformas no tienen barandas. Si te ca\xE9s, reaparec\xE9s en el \xFAltimo
+    checkpoint."
+  - "La pasarela de servicio es un atajo sin barandas: s\xF3lo para pilotos seguros."
+  - "Las turbinas empujan el kart de costado. Compens\xE1 con la direcci\xF3n."
+  - "Tom\xE1 impulso en la plataforma azul antes del gran salto."

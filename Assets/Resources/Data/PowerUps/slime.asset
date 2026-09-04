@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc07a99d582a3405207d27c90cceaa9, type: 3}
+  m_Name: slime
+  m_EditorClassIdentifier: 
+  id: slime
+  displayName: Mancha Slime
+  description: Charco resbaladizo. Quien lo pisa pierde adherencia.
+  kind: 7
+  sortOrder: 6
+  charges: 1
+  duration: 15
+  magnitude: 2.5
+  secondary: 4
+  aiCanUse: 1
+  iconColor: {r: 0.5, g: 1, b: 0.3, a: 1}
+  shortLabel: SLIME
+  weightLeader: 4
+  weightFront: 3
+  weightMid: 2
+  weightBack: 1

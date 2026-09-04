@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af9f2d986be7899d939787f1d6c65ff, type: 3}
+  m_Name: balanced
+  m_EditorClassIdentifier: 
+  id: balanced
+  displayName: Balanced
+  description: Piloto completo sin excesos.
+  sortOrder: 1
+  aggression: 0.5
+  precision: 0.6
+  powerUpUsage: 0.5
+  overtakeTendency: 0.55
+  riskTaking: 0.5
+  driftSkill: 0.55
+  defendTendency: 0.5
+  lineVariance: 0.25
+  reactionTime: 0.25

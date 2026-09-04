@@ -157,7 +157,7 @@ namespace VortexKarts.Core
             KartMap.Enable();
         }
 
-        private void HandleDeviceChange(InputDevice device, InputDeviceChange change)
+        private void HandleDeviceChange(UnityEngine.InputSystem.InputDevice device, InputDeviceChange change)
         {
             if (!(device is Gamepad)) return;
             switch (change)

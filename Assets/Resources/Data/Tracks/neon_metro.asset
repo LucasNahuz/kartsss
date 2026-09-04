@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 695481921c1d596e2c99b85aa65fe8fc, type: 3}
+  m_Name: neon_metro
+  m_EditorClassIdentifier: 
+  id: neon_metro
+  displayName: "Metro Ne\xF3n"
+  sceneName: Track_NeonCity
+  theme: 0
+  difficultyLabel: "F\xC1CIL / MEDIA"
+  description: "Ciudad futurista de noche. Autopista elevada, t\xFAnel y un callej\xF3n
+    secreto."
+  sortOrder: 0
+  laps: 3
+  expectedLapSeconds: 70
+  controlPoints:
+  - position: {x: 0, y: 0, z: -60}
+    width: 16
+    flags: 0
+  - position: {x: 0, y: 0, z: 40}
+    width: 16
+    flags: 0
+  - position: {x: 0, y: 0, z: 150}
+    width: 16
+    flags: 0
+  - position: {x: 20, y: 0, z: 215}
+    width: 15
+    flags: 0
+  - position: {x: 65, y: 0, z: 260}
+    width: 15
+    flags: 0
+  - position: {x: 135, y: 0, z: 280}
+    width: 16
+    flags: 0
+  - position: {x: 215, y: 0, z: 272}
+    width: 16
+    flags: 0
+  - position: {x: 275, y: 0, z: 240}
+    width: 14
+    flags: 16
+  - position: {x: 305, y: 0, z: 185}
+    width: 14
+    flags: 16
+  - position: {x: 315, y: 3, z: 125}
+    width: 14
+    flags: 0
+  - position: {x: 310, y: 9, z: 60}
+    width: 13
+    flags: 0
+  - position: {x: 300, y: 12, z: -5}
+    width: 13
+    flags: 32
+  - position: {x: 300, y: 12, z: -75}
+    width: 13
+    flags: 0
+  - position: {x: 292, y: 10, z: -145}
+    width: 13
+    flags: 0
+  - position: {x: 268, y: 5, z: -205}
+    width: 13
+    flags: 0
+  - position: {x: 228, y: 0, z: -255}
+    width: 14
+    flags: 0
+  - position: {x: 170, y: 0, z: -285}
+    width: 14
+    flags: 0
+  - position: {x: 110, y: 0, z: -298}
+    width: 14
+    flags: 8
+  - position: {x: 45, y: 0, z: -300}
+    width: 14
+    flags: 8
+  - position: {x: -25, y: 0, z: -298}
+    width: 14
+    flags: 0
+  - position: {x: -85, y: 2.5, z: -290}
+    width: 14
+    flags: 0
+  - position: {x: -125, y: 3.5, z: -285}
+    width: 14
+    flags: 1
+  - position: {x: -175, y: 0, z: -278}
+    width: 14
+    flags: 0
+  - position: {x: -225, y: 0, z: -255}
+    width: 13
+    flags: 16
+  - position: {x: -255, y: 0, z: -210}
+    width: 13
+    flags: 16
+  - position: {x: -245, y: 0, z: -160}
+    width: 13
+    flags: 16
+  - position: {x: -205, y: 0, z: -130}
+    width: 14
+    flags: 0
+  - position: {x: -150, y: 0, z: -130}
+    width: 15
+    flags: 32
+  - position: {x: -95, y: 0, z: -135}
+    width: 15
+    flags: 0
+  - position: {x: -48, y: 0, z: -122}
+    width: 15
+    flags: 0
+  - position: {x: -14, y: 0, z: -95}
+    width: 16
+    flags: 0
+  shortcuts:
+  - name: "Callej\xF3n"
+    entryPointIndex: 12
+    exitPointIndex: 16
+    waypoints:
+    - {x: 285, y: 11, z: -100}
+    - {x: 250, y: 7.5, z: -140}
+    - {x: 215, y: 3.5, z: -190}
+    - {x: 190, y: 0.5, z: -245}
+    width: 7
+    wallsEnabled: 1
+    isTunnel: 0
+    aiPreference: 0.5
+    aiSpeedFraction: 0.72
+  boostPads:
+  - placement:
+      segmentIndex: 11
+      t: 0.35
+      lateralOffset: -3
+    length: 6
+    width: 4
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  - placement:
+      segmentIndex: 11
+      t: 0.35
+      lateralOffset: 3
+    length: 6
+    width: 4
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  - placement:
+      segmentIndex: 27
+      t: 0.4
+      lateralOffset: 0
+    length: 6
+    width: 8
+    boostDuration: 1.3
+    boostMultiplier: 1.28
+  powerUpRows:
+  - placement:
+      segmentIndex: 1
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 5
+      t: 0.3
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 10
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 15
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 19
+      t: 0.35
+      lateralOffset: 0
+    count: 4
+  - placement:
+      segmentIndex: 26
+      t: 0.5
+      lateralOffset: 0
+    count: 4
+  hazards:
+  - type: 0
+    placement:
+      segmentIndex: 18
+      t: 0.5
+      lateralOffset: 0
+    size: 4
+    strength: 1.2
+    range: 6
+  - type: 3
+    placement:
+      segmentIndex: 24
+      t: 0.5
+      lateralOffset: 3
+    size: 5
+    strength: 0.35
+    range: 8
+  nodeSpacing: 4
+  checkpointSpacing: 110
+  gapLength: 16
+  kickerHeight: 1.3
+  wallHeight: 1.4
+  tunnelHeight: 6.5
+  killY: -25
+  hasGroundPlane: 1
+  groundPlaneY: -0.6
+  skyColor: {r: 0.03, g: 0.03, b: 0.1, a: 1}
+  horizonColor: {r: 0.25, g: 0.08, b: 0.4, a: 1}
+  fogColor: {r: 0.06, g: 0.04, b: 0.16, a: 1}
+  fogDensity: 0.0035
+  sunColor: {r: 0.6, g: 0.65, b: 1, a: 1}
+  sunIntensity: 0.5
+  sunDirection: {x: 40, y: -30, z: 0}
+  ambientColor: {r: 0.2, g: 0.2, b: 0.4, a: 1}
+  roadColor: {r: 0.16, g: 0.16, b: 0.2, a: 1}
+  roadEdgeColor: {r: 0.1, g: 0.9, b: 1, a: 1}
+  wallColor: {r: 0.2, g: 0.2, b: 0.32, a: 1}
+  accentColor: {r: 1, g: 0.2, b: 0.8, a: 1}
+  groundColor: {r: 0.08, g: 0.08, b: 0.12, a: 1}
+  tips:
+  - "Los derrapes largos generan un turbo m\xE1s poderoso."
+  - "El callej\xF3n junto a la autopista elevada es m\xE1s corto pero muy estrecho."
+  - "Aceler\xE1 justo cuando aparece GO para salir con turbo."
+  - Las plataformas azules de la autopista dan un impulso gratis.

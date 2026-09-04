@@ -30,7 +30,7 @@ namespace VortexKarts.PowerUps
         private float ownerImmuneUntil;
         private float dieAt;
         private float strength;
-        private Renderer light;
+        private Renderer lampRenderer;
         private Material lightOn, lightOff;
         private readonly Collider[] hits = new Collider[8];
 
@@ -44,7 +44,7 @@ namespace VortexKarts.PowerUps
             m.lightOn = MaterialLibrary.Emissive(Color.black, new Color(1f, 0.85f, 0.2f), 3f);
             m.lightOff = MaterialLibrary.Lit(new Color(0.4f, 0.35f, 0.1f));
             var lamp = PrimitiveFactory.Sphere("Lamp", go.transform, new Vector3(0f, 0.5f, 0f), 0.4f, m.lightOn);
-            m.light = lamp.GetComponent<Renderer>();
+            m.lampRenderer = lamp.GetComponent<Renderer>();
             PrimitiveFactory.SetShadowCasting(lamp, false, false);
             for (int i = 0; i < 4; i++)
             {
@@ -88,7 +88,7 @@ namespace VortexKarts.PowerUps
                 return;
             }
             bool blink = Mathf.Repeat(Time.time, 0.6f) < 0.3f;
-            light.sharedMaterial = blink ? lightOn : lightOff;
+            lampRenderer.sharedMaterial = blink ? lightOn : lightOff;
             if (Time.time < armedAt) return;
 
             int count = Physics.OverlapSphereNonAlloc(transform.position + Vector3.up * 0.4f, TriggerRadius, hits, Layers.KartMask, QueryTriggerInteraction.Ignore);

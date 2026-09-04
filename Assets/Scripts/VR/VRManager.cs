@@ -175,7 +175,7 @@ namespace VortexKarts.VR
                 {
                     var head = InputDevices.GetDeviceAtXRNode(XRNode.Head);
                     bool value;
-                    if (head.isValid && head.TryGetFeatureValue(CommonUsages.isTracked, out value)) tracked = value;
+                    if (head.isValid && head.TryGetFeatureValue(UnityEngine.XR.CommonUsages.isTracked, out value)) tracked = value;
                 }
                 catch (System.Exception)
                 {

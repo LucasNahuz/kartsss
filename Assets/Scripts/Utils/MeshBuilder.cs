@@ -86,7 +86,7 @@ namespace VortexKarts.Utils
             int c = AddVertex(curRight, n, new Vector2(1f, vCur));
             int d = AddVertex(curLeft, n, new Vector2(0f, vCur));
             // Winding chosen so the face points along n.
-            if (Vector3.Dot(Vector3.Cross(b - a, d - a), n) >= 0f)
+            if (Vector3.Dot(Vector3.Cross(prevRight - prevLeft, curLeft - prevLeft), n) >= 0f)
             {
                 AddTriangle(a, d, b);
                 AddTriangle(b, d, c);
