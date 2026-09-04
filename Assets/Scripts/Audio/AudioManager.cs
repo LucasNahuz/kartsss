@@ -49,6 +49,7 @@ namespace VortexKarts.Audio
                 src.minDistance = 4f;
                 src.maxDistance = 90f;
                 src.dopplerLevel = 0.2f;
+                src.ignoreListenerPause = true; // UI sounds must work while the race is paused
                 oneShots.Add(src);
             }
             musicSource = new GameObject("Music").AddComponent<AudioSource>();

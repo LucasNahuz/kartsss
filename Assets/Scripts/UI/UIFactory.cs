@@ -139,6 +139,7 @@ namespace VortexKarts.UI
             {
                 var go = new GameObject("EventSystem");
                 es = go.AddComponent<EventSystem>();
+                cancelHooked = false; // new module per scene: re-hook the cancel action
                 UIModule = go.AddComponent<InputSystemUIInputModule>();
                 try { UIModule.AssignDefaultActions(); } catch (Exception e) { Debug.LogWarning("[UI] Default UI actions: " + e.Message); }
                 UIModule.moveRepeatDelay = 0.35f;
@@ -146,6 +147,7 @@ namespace VortexKarts.UI
             }
             else if (UIModule == null)
             {
+                cancelHooked = false;
                 UIModule = es.GetComponent<InputSystemUIInputModule>();
                 if (UIModule == null)
                 {
