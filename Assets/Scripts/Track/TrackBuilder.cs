@@ -107,6 +107,7 @@ namespace VortexKarts.Track
 
             if (data.hasGroundPlane) BuildGroundPlane(data, nodes, geometry);
             BuildKillZones(data, nodes, cpDistances, length, geometry);
+            if (data.hasGroundPlane) BuildChasmKillZones(data, nodes, geometry);
 
             // ---- Gameplay objects
             var gameplay = new GameObject("Gameplay").transform;
@@ -256,10 +257,15 @@ namespace VortexKarts.Track
                     float lateral = Mathf.Abs(signedLateral);
                     float vertical = Mathf.Abs(Vector3.Dot(delta, closest.Up));
                     if (vertical >= 3.5f) continue;
-                    if (lateral < closest.Width * 0.5f + 0.8f)
+                    if (lateral + n.Width * 0.5f < closest.Width * 0.5f + 0.3f)
                     {
-                        // Centre of the shortcut still over the main lane: no geometry at all.
+                        // Shortcut lane entirely inside the main lane: no geometry at all (the main road is the floor).
                         n.SkipMesh = true;
+                        n.Flags |= TrackPointFlags.NoWalls;
+                    }
+                    else if (lateral < closest.Width * 0.5f + 0.8f)
+                    {
+                        // Partially overlapping: keep the floor, drop the walls (they would cut across the main lane).
                         n.Flags |= TrackPointFlags.NoWalls;
                     }
                     else if (lateral < closest.Width * 0.5f + n.Width * 0.5f + 2.5f)
@@ -518,6 +524,28 @@ namespace VortexKarts.Track
                 Vector3 center = startNode.Position + startNode.Forward * (data.gapLength * 0.5f) - Vector3.up * 4.5f;
                 KillZone.Create(parent, center, Quaternion.LookRotation(MathUtil.FlatNormalized(startNode.Forward), Vector3.up),
                     new Vector3(startNode.Width + 30f, 6f, data.gapLength + 14f));
+            }
+        }
+
+        /// <summary>
+        /// Elevated sections without walls (bridges, ledges) drop onto the off-road plane far below. Driving on
+        /// from down there is hopeless, so the fall respawns the kart at the last checkpoint instead.
+        /// </summary>
+        private static void BuildChasmKillZones(TrackData data, List<TrackNode> nodes, Transform parent)
+        {
+            float next = 0f;
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var n = nodes[i];
+                if (n.Distance < next) continue;
+                bool open = n.Has(TrackPointFlags.NoWallLeft) || n.Has(TrackPointFlags.NoWallRight);
+                float height = n.Position.y - data.groundPlaneY;
+                if (!open || height < 6f) continue;
+                next = n.Distance + 18f;
+                // Low and narrow enough not to touch roads passing nearby at ground level or shortcuts above it.
+                Vector3 center = new Vector3(n.Position.x, data.groundPlaneY + 2.5f, n.Position.z);
+                var rot = Quaternion.LookRotation(MathUtil.FlatNormalized(n.Forward), Vector3.up);
+                KillZone.Create(parent, center, rot, new Vector3(n.Width + 30f, 6f, 24f));
             }
         }
 

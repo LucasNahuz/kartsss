@@ -46,6 +46,7 @@ namespace VortexKarts.AI
         private float skill;
         private Vector3 lastProgressPosition;
         private float noProgressTimer;
+        private float offRoadTimer;
 
         public AIPersonality Personality => personality;
         public bool WantsDrift => wantsDrift;
@@ -102,6 +103,18 @@ namespace VortexKarts.AI
             float dt = Time.deltaTime;
             var node = tracker.CurrentNode ?? track.GetClosestNode(kart.Position);
             if (node == null) return;
+
+            // Safety net: a long time off the road (fell to the ground far below) -> respawn.
+            if (kart.Surface == SurfaceType.OffRoad && kart.IsGrounded && !kart.HasFinished) offRoadTimer += dt;
+            else offRoadTimer = 0f;
+            if (offRoadTimer > 10f && !kart.Respawn.IsRespawning)
+            {
+                offRoadTimer = 0f;
+                plannedShortcut = -1;
+                mode = Mode.Racing;
+                kart.Respawn.RequestRespawn("ai off-road too long");
+                return;
+            }
 
             // Safety net: no real progress for a while (wedged between geometry) -> respawn.
             if ((kart.Position - lastProgressPosition).sqrMagnitude > 6f * 6f)
