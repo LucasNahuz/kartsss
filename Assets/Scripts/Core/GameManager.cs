@@ -25,6 +25,9 @@ namespace VortexKarts.Core
         /// <summary>True while a race scene is paused (Time.timeScale = 0).</summary>
         public bool IsPaused { get; private set; }
 
+        /// <summary>Testing hook (-autopilot): the player's kart is driven by the AI.</summary>
+        public bool AutoPilot { get; private set; }
+
         public static GameManager EnsureExists()
         {
             if (Instance != null) return Instance;
@@ -98,7 +101,68 @@ namespace VortexKarts.Core
 
         public void OnBootstrapScene()
         {
+            // Automation hooks for headless testing:
+            //   -autorace <trackId>   skips the menu and starts a race
+            //   -quitafter <seconds>  quits the application after N seconds
+            //   -autopilot            the player kart is driven by the AI (automated full-race test)
+            AutoPilot = System.Array.Exists(System.Environment.GetCommandLineArgs(), a => string.Equals(a, "-autopilot", System.StringComparison.OrdinalIgnoreCase));
+            string autoTrack = GetArg("-autorace");
+            string quitAfter = GetArg("-quitafter");
+            float quitSeconds;
+            if (!string.IsNullOrEmpty(quitAfter) && float.TryParse(quitAfter, System.Globalization.NumberStyles.Float,
+                    System.Globalization.CultureInfo.InvariantCulture, out quitSeconds))
+            {
+                StartCoroutine(QuitAfter(quitSeconds));
+            }
+            //   -screenshots 10,25,40  saves PNG captures at those seconds (next to the executable)
+            string shots = GetArg("-screenshots");
+            if (!string.IsNullOrEmpty(shots))
+            {
+                foreach (var s in shots.Split(','))
+                {
+                    float t;
+                    if (float.TryParse(s.Trim(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out t))
+                    {
+                        StartCoroutine(ScreenshotAfter(t));
+                    }
+                }
+            }
+            if (!string.IsNullOrEmpty(autoTrack))
+            {
+                Setup.TrackId = autoTrack;
+                Setup.Validate();
+                Debug.Log("[GameManager] Auto race on " + Setup.TrackId);
+                StartRace();
+                return;
+            }
             Loader.LoadScene(SceneMainMenu, false);
+        }
+
+        private static string GetArg(string name)
+        {
+            var args = System.Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length - 1; i++)
+            {
+                if (string.Equals(args[i], name, System.StringComparison.OrdinalIgnoreCase)) return args[i + 1];
+            }
+            return null;
+        }
+
+        private System.Collections.IEnumerator ScreenshotAfter(float seconds)
+        {
+            yield return new WaitForSecondsRealtime(seconds);
+            string dir = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Application.dataPath) ?? ".", "Screenshots");
+            try { System.IO.Directory.CreateDirectory(dir); } catch (System.Exception) { }
+            string file = System.IO.Path.Combine(dir, "shot_" + Mathf.RoundToInt(seconds) + "s.png");
+            ScreenCapture.CaptureScreenshot(file);
+            Debug.Log("[GameManager] Screenshot " + file);
+        }
+
+        private System.Collections.IEnumerator QuitAfter(float seconds)
+        {
+            yield return new WaitForSecondsRealtime(seconds);
+            Debug.Log("[GameManager] Auto quit after " + seconds + "s");
+            QuitGame();
         }
 
         public void StartRace()

@@ -83,7 +83,7 @@ namespace VortexKarts.UI
 
         private void BuildDashboard()
         {
-            var canvas = UIFactory.CreateWorldCanvas("DashboardCanvas", kart.DashboardAnchor, Vector3.zero, Quaternion.identity, new Vector2(900f, 400f), 0.0008f);
+            var canvas = UIFactory.CreateWorldCanvas("DashboardCanvas", kart.DashboardAnchor, Vector3.zero, Quaternion.identity, new Vector2(900f, 400f), 0.00062f);
             var t = canvas.transform;
             UIFactory.Panel(t, Vector2.zero, new Vector2(900f, 400f), new Color(0.03f, 0.04f, 0.08f, 0.85f));
             UIFactory.Panel(t, new Vector2(0f, 195f), new Vector2(900f, 8f), UIFactory.Accent);
@@ -128,7 +128,7 @@ namespace VortexKarts.UI
 
         private void BuildNotice()
         {
-            var canvas = UIFactory.CreateWorldCanvas("NoticeCanvas", kart.SeatAnchor, new Vector3(0f, 0.32f, 2.8f), Quaternion.identity, new Vector2(1400f, 360f), 0.0016f);
+            var canvas = UIFactory.CreateWorldCanvas("NoticeCanvas", kart.SeatAnchor, new Vector3(0f, 0.6f, 3.2f), Quaternion.identity, new Vector2(1400f, 360f), 0.0014f);
             var t = canvas.transform;
             noticeBg = UIFactory.Panel(t, Vector2.zero, new Vector2(1400f, 360f), new Color(0.03f, 0.04f, 0.08f, 0.55f), "NoticeBg").GetComponent<Image>();
             noticeText = UIFactory.Label(t, "", new Vector2(0f, 40f), new Vector2(1380f, 220f), 190, UIFactory.Accent, TextAnchor.MiddleCenter, FontStyle.Bold);
@@ -149,7 +149,7 @@ namespace VortexKarts.UI
             rearCamera.nearClipPlane = 0.5f;
             rearCamera.farClipPlane = 400f;
             rearCamera.targetTexture = rearTexture;
-            rearCamera.stereoTargetEye = StereoTargetEyeMask.None;
+            // Not stereo: the URP camera data below disables XR rendering for this camera.
             rearCamera.clearFlags = CameraClearFlags.SolidColor;
             rearCamera.backgroundColor = RenderSettings.fogColor;
             rearCamera.allowMSAA = false;

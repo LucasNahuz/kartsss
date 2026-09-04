@@ -381,10 +381,10 @@ namespace VortexKarts.Data
                     aiSpeedFraction = 0.72f,
                     waypoints = new List<Vector3>
                     {
-                        new Vector3(285f, 11f, -100f),
-                        new Vector3(250f, 7.5f, -140f),
-                        new Vector3(215f, 3.5f, -190f),
-                        new Vector3(190f, 0.5f, -245f)
+                        new Vector3(272f, 10.5f, -98f),
+                        new Vector3(240f, 7f, -135f),
+                        new Vector3(212f, 3.5f, -188f),
+                        new Vector3(192f, 0.5f, -245f)
                     }
                 }
             };
@@ -503,9 +503,10 @@ namespace VortexKarts.Data
                     aiSpeedFraction = 0.7f,
                     waypoints = new List<Vector3>
                     {
-                        new Vector3(-165f, 5f, 215f),
-                        new Vector3(-130f, 5f, 140f),
-                        new Vector3(-95f, 6f, 70f)
+                        new Vector3(-205f, 4f, 225f),
+                        new Vector3(-195f, 3f, 150f),
+                        new Vector3(-155f, 4f, 80f),
+                        new Vector3(-100f, 6f, 38f)
                     }
                 }
             };

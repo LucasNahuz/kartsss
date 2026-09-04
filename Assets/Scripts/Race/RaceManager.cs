@@ -104,6 +104,28 @@ namespace VortexKarts.Race
             GameEvents.OnHeadTrackingChanged += HandleTracking;
 
             StartCoroutine(CountdownRoutine());
+            if (GameManager.Instance != null && GameManager.Instance.AutoPilot) StartCoroutine(TelemetryRoutine());
+        }
+
+        /// <summary>Automated-test aid: logs the player's state every few seconds.</summary>
+        private IEnumerator TelemetryRoutine()
+        {
+            var wait = new WaitForSeconds(5f);
+            while (true)
+            {
+                yield return wait;
+                if (PlayerKart == null) continue;
+                var t = PlayerKart.GetComponent<RaceProgressTracker>();
+                var ai = PlayerKart.GetComponent<AIKartController>();
+                Debug.Log(string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                    "[Telemetry] t={0:0} pos={1} lap={2} nextCp={3} dist={4:0} lat={5:0.0} speed={6:0.0} surf={7} grounded={8} shortcut={9} wrongWay={10} node={11} world=({12:0},{13:0},{14:0}) ai={15}",
+                    RaceTime, t != null ? t.Position : 0, t != null ? t.Lap : 0, t != null ? t.NextCheckpoint : 0,
+                    t != null ? t.DistanceAlong : 0f, t != null ? t.Lateral : 0f, PlayerKart.ForwardSpeed, PlayerKart.Surface,
+                    PlayerKart.IsGrounded, t != null && t.InShortcut, t != null && t.WrongWay,
+                    t != null && t.CurrentNode != null ? t.CurrentNode.Index : -1,
+                    PlayerKart.Position.x, PlayerKart.Position.y, PlayerKart.Position.z,
+                    ai != null ? ai.DebugState : "player"));
+            }
         }
 
         // ------------------------------------------------------------------ Spawning
@@ -138,6 +160,14 @@ namespace VortexKarts.Race
                 {
                     kart = KartFactory.CreateKart(setup.Kart, playerPilot, true, pos, rot, slot);
                     PlayerKart = kart;
+                    if (GameManager.Instance != null && GameManager.Instance.AutoPilot)
+                    {
+                        var driver = kart.GetComponent<PlayerKartDriver>();
+                        if (driver != null) Destroy(driver);
+                        var ai = kart.gameObject.AddComponent<AIKartController>();
+                        ai.Setup(GameDatabase.GetPersonality("technical"), Difficulty, rng.Next());
+                        Debug.Log("[RaceManager] Autopilot enabled for the player kart.");
+                    }
                 }
                 else
                 {
@@ -245,6 +275,14 @@ namespace VortexKarts.Race
         {
             if (kart != PlayerKart || playerFinishedHandled) return;
             playerFinishedHandled = true;
+            // Hand the kart to a gentle AI for the parade lap while the results are shown.
+            if (kart.GetComponent<AIKartController>() == null)
+            {
+                var driver = kart.GetComponent<PlayerKartDriver>();
+                if (driver != null) Destroy(driver);
+                var ai = kart.gameObject.AddComponent<AIKartController>();
+                ai.Setup(GameDatabase.GetPersonality("technical"), Difficulty, 12345);
+            }
             StartCoroutine(FinishRoutine());
         }
 

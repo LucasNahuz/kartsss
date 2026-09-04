@@ -270,6 +270,10 @@ for (const s of scenes) {
   ebs += `  - enabled: 1\n    path: ${rel}\n    guid: ${guidFor(rel)}\n`;
 }
 ebs += `  m_configObjects: {}\n  m_UseUCBPForAssetBundles: 0\n`;
-fs.writeFileSync(path.join(root, 'ProjectSettings', 'EditorBuildSettings.asset'), ebs, 'utf8');
+// Only bootstrap the file when it does not exist: Unity stores XR/OpenXR config objects in it.
+const ebsPath = path.join(root, 'ProjectSettings', 'EditorBuildSettings.asset');
+if (!fs.existsSync(ebsPath) || process.argv.includes('--force-build-settings')) {
+  fs.writeFileSync(ebsPath, ebs, 'utf8');
+}
 
 console.log(`meta files created: ${created}, scenes written: ${scenesWritten}, SceneEntry guid: ${sceneEntryGuid}`);

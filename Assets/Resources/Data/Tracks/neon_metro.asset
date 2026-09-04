@@ -121,10 +121,10 @@ MonoBehaviour:
     entryPointIndex: 12
     exitPointIndex: 16
     waypoints:
-    - {x: 285, y: 11, z: -100}
-    - {x: 250, y: 7.5, z: -140}
-    - {x: 215, y: 3.5, z: -190}
-    - {x: 190, y: 0.5, z: -245}
+    - {x: 272, y: 10.5, z: -98}
+    - {x: 240, y: 7, z: -135}
+    - {x: 212, y: 3.5, z: -188}
+    - {x: 192, y: 0.5, z: -245}
     width: 7
     wallsEnabled: 1
     isTunnel: 0

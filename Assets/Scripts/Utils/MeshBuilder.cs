@@ -65,8 +65,8 @@ namespace VortexKarts.Utils
             int ib = AddVertex(b, n, uvB);
             int ic = AddVertex(c, n, uvC);
             int id = AddVertex(d, n, uvD);
-            AddTriangle(ia, id, ib);
-            AddTriangle(ib, id, ic);
+            AddTriangle(ia, ib, id);
+            AddTriangle(ib, ic, id);
         }
 
         public void AddQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
@@ -85,16 +85,16 @@ namespace VortexKarts.Utils
             int b = AddVertex(prevRight, n, new Vector2(1f, vPrev));
             int c = AddVertex(curRight, n, new Vector2(1f, vCur));
             int d = AddVertex(curLeft, n, new Vector2(0f, vCur));
-            // Winding chosen so the face points along n.
+            // Unity's front face normal for (v0, v1, v2) is Cross(v1 - v0, v2 - v0); pick the winding that matches n.
             if (Vector3.Dot(Vector3.Cross(prevRight - prevLeft, curLeft - prevLeft), n) >= 0f)
-            {
-                AddTriangle(a, d, b);
-                AddTriangle(b, d, c);
-            }
-            else
             {
                 AddTriangle(a, b, d);
                 AddTriangle(b, c, d);
+            }
+            else
+            {
+                AddTriangle(a, d, b);
+                AddTriangle(b, d, c);
             }
         }
 

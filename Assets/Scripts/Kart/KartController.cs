@@ -205,14 +205,17 @@ namespace VortexKarts.Kart
             ReadGround();
             Jump.Tick(dt);
 
-            bool locked = InputLocked || Status.ControlsLocked || HasFinished;
+            bool locked = InputLocked || Status.ControlsLocked;
             KartInputState input = locked ? KartInputState.Empty : Input;
             input.DriftPressed = driftPressLatched && !locked;
             driftPressLatched = false;
             if (HasFinished)
             {
-                // Coast to a gentle cruise after the finish line so the podium karts keep rolling.
-                input.Throttle = ForwardSpeed < Stats.maxSpeed * 0.35f ? 0.6f : 0f;
+                // Parade lap after the finish line: steering allowed, no items, gentle speed.
+                input.Throttle = Mathf.Min(input.Throttle, 0.55f);
+                input.Drift = false;
+                input.DriftPressed = false;
+                input.UsePowerUp = false;
             }
 
             if (input.DriftPressed && !locked) Jump.TryHop();
@@ -312,7 +315,7 @@ namespace VortexKarts.Kart
             if (Drift.IsDrifting && IsGrounded)
             {
                 // Keep the slide alive: push outward proportionally to speed.
-                float slide = -Drift.Direction * Mathf.Abs(fwdSpeed) * 0.28f;
+                float slide = -Drift.Direction * Mathf.Abs(fwdSpeed) * 0.18f;
                 latSpeed = Mathf.MoveTowards(latSpeed, slide, 18f * dt);
             }
 

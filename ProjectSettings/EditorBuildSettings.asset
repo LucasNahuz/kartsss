@@ -23,5 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Track_SkyLab.unity
     guid: 899e4f6d21f95ff01a3f24e48520b4a2
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 04e3228faa5afcc40930d05455dbca07, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 7aa840be5b6a12a40a493feb09590a41, type: 2}
   m_UseUCBPForAssetBundles: 0

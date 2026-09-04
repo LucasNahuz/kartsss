@@ -188,13 +188,14 @@ namespace VortexKarts.Kart
                 false, Quaternion.Euler(25f, 0f, 0f));
             var dashAnchor = new GameObject("DashboardAnchor").transform;
             dashAnchor.SetParent(cockpit, false);
-            dashAnchor.localPosition = new Vector3(0f, 0.9f, 0.6f);
-            dashAnchor.localRotation = Quaternion.Euler(25f, 0f, 0f);
+            dashAnchor.localPosition = new Vector3(0f, 0.95f, 0.72f);
+            dashAnchor.localRotation = Quaternion.Euler(32f, 0f, 0f);
             controller.DashboardAnchor = dashAnchor;
 
+            // Eye anchor: a little above the pilot's head centre so the road is visible over the wheel.
             var seatAnchor = new GameObject("SeatAnchor").transform;
             seatAnchor.SetParent(cockpit, false);
-            seatAnchor.localPosition = new Vector3(0f, 1.02f, -0.22f);
+            seatAnchor.localPosition = new Vector3(0f, 1.16f, -0.3f);
             controller.SeatAnchor = seatAnchor;
 
             // ---- Pilot
@@ -255,8 +256,8 @@ namespace VortexKarts.Kart
 
             rig.LeftShoulder = new Vector3(-0.2f, 0.82f, -0.25f);
             rig.RightShoulder = new Vector3(0.2f, 0.82f, -0.25f);
-            rig.LeftArm = PrimitiveFactory.Capsule("ArmL", root, rig.LeftShoulder, 0.1f, 0.5f, matSuit).transform;
-            rig.RightArm = PrimitiveFactory.Capsule("ArmR", root, rig.RightShoulder, 0.1f, 0.5f, matSuit).transform;
+            rig.LeftArm = PrimitiveFactory.Capsule("ArmL", root, rig.LeftShoulder, 0.075f, 0.5f, matSuit).transform;
+            rig.RightArm = PrimitiveFactory.Capsule("ArmR", root, rig.RightShoulder, 0.075f, 0.5f, matSuit).transform;
             rig.LeftHand = PrimitiveFactory.Sphere("HandL", root, Vector3.zero, 0.11f, matDark).transform;
             rig.RightHand = PrimitiveFactory.Sphere("HandR", root, Vector3.zero, 0.11f, matDark).transform;
             rig.LeftGrip = leftGrip;

@@ -12,7 +12,7 @@ namespace VortexKarts.Track
     /// </summary>
     public static class TrackBuilder
     {
-        private const float LateralAccelForSpeed = 15f;   // m/s^2 the AI trusts in corners
+        private const float LateralAccelForSpeed = 12f;   // m/s^2 the AI trusts in corners
         private const float MaxReferenceSpeed = 36f;
         private const float BrakingDecel = 18f;
         private const float KickerLength = 9f;
@@ -87,6 +87,7 @@ namespace VortexKarts.Track
                 var list = BuildShortcutNodes(data, def, sc, cpDistances, length);
                 shortcutNodes.Add(list);
             }
+            CarveShortcutJunctions(nodes, shortcutNodes, length);
 
             runtime.Setup(data, nodes, shortcutNodes, length);
 
@@ -222,6 +223,92 @@ namespace VortexKarts.Track
             }
         }
 
+        /// <summary>
+        /// Shortcuts start and end on the main road's centre line. Open the main wall on the side the
+        /// shortcut leaves/joins, and do not build shortcut geometry while it still overlaps the main road
+        /// (otherwise its walls would cut across the main lane and block everybody).
+        /// </summary>
+        private static void CarveShortcutJunctions(List<TrackNode> mainNodes, List<List<TrackNode>> shortcuts, float length)
+        {
+            for (int sc = 0; sc < shortcuts.Count; sc++)
+            {
+                var list = shortcuts[sc];
+                if (list.Count < 4) continue;
+
+                // Nodes overlapping the main road: no mesh, no walls.
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var n = list[i];
+                    TrackNode closest = null;
+                    float best = float.MaxValue;
+                    for (int m = 0; m < mainNodes.Count; m += 1)
+                    {
+                        float d = (mainNodes[m].Position - n.Position).sqrMagnitude;
+                        if (d < best)
+                        {
+                            best = d;
+                            closest = mainNodes[m];
+                        }
+                    }
+                    if (closest == null) continue;
+                    Vector3 delta = n.Position - closest.Position;
+                    float signedLateral = Vector3.Dot(delta, closest.Right);
+                    float lateral = Mathf.Abs(signedLateral);
+                    float vertical = Mathf.Abs(Vector3.Dot(delta, closest.Up));
+                    if (vertical >= 3.5f) continue;
+                    if (lateral < closest.Width * 0.5f + 0.8f)
+                    {
+                        // Centre of the shortcut still over the main lane: no geometry at all.
+                        n.SkipMesh = true;
+                        n.Flags |= TrackPointFlags.NoWalls;
+                    }
+                    else if (lateral < closest.Width * 0.5f + n.Width * 0.5f + 2.5f)
+                    {
+                        // Running alongside the main road: drop the walls facing each other so there is no funnel.
+                        bool shortcutOnRight = signedLateral > 0f;
+                        n.Flags |= shortcutOnRight ? TrackPointFlags.NoWallLeft : TrackPointFlags.NoWallRight;
+                        TrackPointFlags mainFlag = shortcutOnRight ? TrackPointFlags.NoWallRight : TrackPointFlags.NoWallLeft;
+                        for (int k = -2; k <= 2; k++)
+                        {
+                            int idx = closest.Index + k;
+                            idx %= mainNodes.Count;
+                            if (idx < 0) idx += mainNodes.Count;
+                            mainNodes[idx].Flags |= mainFlag;
+                        }
+                    }
+                }
+
+                // Main road: open the wall on the branch side around entry and exit.
+                OpenMainWall(mainNodes, list[0], list[Mathf.Min(4, list.Count - 1)], length, -10f, 26f);
+                OpenMainWall(mainNodes, list[list.Count - 1], list[Mathf.Max(0, list.Count - 5)], length, -26f, 10f);
+            }
+        }
+
+        private static void OpenMainWall(List<TrackNode> mainNodes, TrackNode junction, TrackNode towards, float length, float from, float to)
+        {
+            float junctionDistance = junction.MainDistanceEquivalent;
+            // Find the main node at the junction to know which side the shortcut is on.
+            TrackNode mainAt = null;
+            float best = float.MaxValue;
+            for (int m = 0; m < mainNodes.Count; m++)
+            {
+                float d = (mainNodes[m].Position - junction.Position).sqrMagnitude;
+                if (d < best)
+                {
+                    best = d;
+                    mainAt = mainNodes[m];
+                }
+            }
+            if (mainAt == null) return;
+            float side = Vector3.Dot(towards.Position - junction.Position, mainAt.Right);
+            TrackPointFlags flag = side >= 0f ? TrackPointFlags.NoWallRight : TrackPointFlags.NoWallLeft;
+            for (int m = 0; m < mainNodes.Count; m++)
+            {
+                float rel = MathUtil.LoopDelta(junctionDistance, mainNodes[m].Distance, length);
+                if (rel >= from && rel <= to) mainNodes[m].Flags |= flag;
+            }
+        }
+
         private static List<TrackNode> BuildShortcutNodes(TrackData data, ShortcutDefinition def, int index, float[] cpDistances, float length)
         {
             var pts = new List<Vector3>();
@@ -294,7 +381,7 @@ namespace VortexKarts.Track
                 {
                     var a = nodes[i];
                     var b = nodes[closed ? (i + 1) % n : i + 1];
-                    if (a.IsGap || b.IsGap) continue;
+                    if (a.IsGap || b.IsGap || a.SkipMesh || b.SkipMesh) continue;
 
                     float va = a.Distance / 10f, vb = b.Distance / 10f;
                     if (closed && i == n - 1) vb = va + data.nodeSpacing / 10f;

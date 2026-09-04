@@ -24,6 +24,8 @@ namespace VortexKarts.Track
         public TrackPointFlags Flags;
         /// <summary>No road under this node (jump gap).</summary>
         public bool IsGap;
+        /// <summary>Road exists logically but no mesh is generated (shortcut segment overlapping the main road).</summary>
+        public bool SkipMesh;
         public int Segment;
         public float T;
         public bool IsShortcut;

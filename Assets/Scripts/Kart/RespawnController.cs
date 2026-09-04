@@ -100,6 +100,7 @@ namespace VortexKarts.Kart
 
             Vector3 pos;
             Quaternion rot;
+            if (tracker == null) tracker = GetComponent<RaceProgressTracker>(); // added after this component by the factory
             if (tracker == null || !tracker.TryGetRespawnPose(out pos, out rot))
             {
                 var track = TrackRuntime.Instance;

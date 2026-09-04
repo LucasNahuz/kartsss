@@ -60,6 +60,16 @@ namespace VortexKarts.Race
             ResultsScreen.Create(Race);
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             DebugRacePanel.Create(Race);
+            var args = System.Environment.GetCommandLineArgs();
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (string.Equals(args[i], "-topdown", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    float h = 90f;
+                    if (i + 1 < args.Length) float.TryParse(args[i + 1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out h);
+                    TopDownDebugCamera.Create(Race, h <= 0f ? 90f : h);
+                }
+            }
 #endif
             GameEvents.OnSettingsApplied += OnSettingsApplied;
             OnSettingsApplied(SaveManager.Settings);

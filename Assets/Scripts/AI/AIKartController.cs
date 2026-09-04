@@ -44,10 +44,13 @@ namespace VortexKarts.AI
         private float itemHoldTimer;
         private float reactionTimer;
         private float skill;
-        private float lastLapForShortcut = -1f;
+        private Vector3 lastProgressPosition;
+        private float noProgressTimer;
 
         public AIPersonality Personality => personality;
         public bool WantsDrift => wantsDrift;
+        public string DebugState => mode + (wantsDrift ? "/drift" : "") + (plannedShortcut >= 0 ? "/sc" + plannedShortcut : "") +
+                                    " lat=" + lateralTarget.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture);
 
         public void Setup(AIPersonality p, DifficultySettings d, int seed)
         {
@@ -96,15 +99,29 @@ namespace VortexKarts.AI
                 kart.SetInput(idle);
                 return;
             }
-            if (kart.HasFinished)
-            {
-                kart.SetInput(KartInputState.Empty);
-                return;
-            }
-
             float dt = Time.deltaTime;
             var node = tracker.CurrentNode ?? track.GetClosestNode(kart.Position);
             if (node == null) return;
+
+            // Safety net: no real progress for a while (wedged between geometry) -> respawn.
+            if ((kart.Position - lastProgressPosition).sqrMagnitude > 6f * 6f)
+            {
+                lastProgressPosition = kart.Position;
+                noProgressTimer = 0f;
+            }
+            else
+            {
+                noProgressTimer += dt;
+                if (noProgressTimer > 8f && !kart.Respawn.IsRespawning)
+                {
+                    noProgressTimer = 0f;
+                    lastProgressPosition = kart.Position;
+                    plannedShortcut = -1;
+                    mode = Mode.Racing;
+                    kart.Respawn.RequestRespawn("ai no progress");
+                    return;
+                }
+            }
 
             decisionTimer -= dt;
             reactionTimer -= dt;
@@ -274,6 +291,7 @@ namespace VortexKarts.AI
             float desired = Mathf.Min(targetNode.RecommendedSpeed, track.GetNodeAhead(node, Mathf.Max(1, steps / 2)).RecommendedSpeed) * cornerFactor;
             if (node.IsGap || targetNode.IsGap || node.Has(TrackPointFlags.BoostZone)) desired = 999f;
             float cap = kart.Stats.maxSpeed * difficulty.topSpeedFactor * RubberBand();
+            if (kart.HasFinished) cap = kart.Stats.maxSpeed * 0.45f; // parade lap
             desired = Mathf.Min(desired, cap);
 
             if (speed > desired * 1.06f && kart.IsGrounded)
@@ -318,7 +336,7 @@ namespace VortexKarts.AI
                 var ahead = track.GetNodeAhead(node, 5);
                 float curv = ahead != null ? ahead.Curvature : 0f;
                 bool driftZone = ahead != null && ahead.Has(TrackPointFlags.DriftZone);
-                bool sharp = Mathf.Abs(curv) > (driftZone ? 0.011f : 0.02f);
+                bool sharp = Mathf.Abs(curv) > (driftZone ? 0.016f : 0.022f);
                 if (sharp && speedFrac > 0.55f && kart.IsGrounded && Mathf.Abs(steer) > 0.25f && reactionTimer <= 0f)
                 {
                     float chance = difficulty.driftUsage * Mathf.Lerp(0.3f, 1.1f, personality.driftSkill);
@@ -349,7 +367,7 @@ namespace VortexKarts.AI
             {
                 // Modulate steering inside the drift: steer into it, loosen when pointing too far in.
                 float headingErr = steer * driftDir;
-                float into = Mathf.Clamp(0.55f + headingErr * 0.7f, -0.3f, 1f);
+                float into = Mathf.Clamp(0.75f + headingErr * 0.7f, -0.2f, 1f);
                 input.Steer = into * driftDir;
             }
         }
@@ -373,24 +391,39 @@ namespace VortexKarts.AI
             float angle = MathUtil.SignedYawAngle(kart.Forward, to);
             wantsDrift = false;
 
-            if (Mathf.Abs(angle) > 60f || recoverTimer > 0.6f)
+            // Heading is controlled directly in this kart model: steering right always swings the nose right,
+            // forwards or backwards. Alternate short reverse / forward pulses, always turning towards the target,
+            // until the nose points roughly at the road again.
+            float steerToTarget = Mathf.Clamp(angle / 25f, -1f, 1f);
+            if (Mathf.Abs(steerToTarget) < 0.5f) steerToTarget = Mathf.Sign(angle == 0f ? 1f : angle) * 0.5f;
+            bool reversePhase = Mathf.Repeat(recoverTimer, 2.4f) > 1.2f;
+            if (Mathf.Abs(angle) > 50f)
             {
-                // Reverse while turning the nose towards the track.
-                input.Brake = 1f;
-                input.Throttle = 0f;
-                input.Steer = angle > 0f ? -1f : 1f;
+                if (reversePhase)
+                {
+                    input.Brake = 1f;
+                    input.Throttle = 0f;
+                }
+                else
+                {
+                    input.Throttle = 0.8f;
+                    input.Brake = 0f;
+                }
+                input.Steer = steerToTarget;
             }
             else
             {
                 input.Throttle = 1f;
+                input.Brake = 0f;
                 input.Steer = Mathf.Clamp(angle / 30f, -1f, 1f);
             }
-            if (recoverTimer <= 0f && Mathf.Abs(angle) < 45f)
+            if (Mathf.Abs(angle) < 40f && kart.ForwardSpeed > -1f)
             {
                 mode = Mode.Racing;
                 decisionTimer = 0f;
+                wantsDrift = false;
             }
-            else if (recoverTimer <= -2.5f)
+            else if (recoverTimer <= -6f)
             {
                 // Still hopeless: let the respawn system handle it.
                 kart.Respawn.RequestRespawn("ai gave up");
