@@ -88,7 +88,8 @@ namespace VortexKarts.UI
             var env = new GameObject("MenuEnvironment").transform;
             var floor = PrimitiveFactory.Cylinder("Platform", env, new Vector3(0f, -0.5f, 2f), 22f, 1f, MaterialLibrary.Lit(new Color(0.1f, 0.11f, 0.16f), 0.5f, 0.3f));
             PrimitiveFactory.SetShadowCasting(floor, false, true);
-            var ring = PrimitiveFactory.Cylinder("PlatformRing", env, new Vector3(0f, -0.02f, 2f), 22.4f, 0.06f, MaterialLibrary.Emissive(Color.black, UIFactory.Accent, 2f));
+            // Slightly wider and lower than the platform so only a thin glowing rim shows.
+            var ring = PrimitiveFactory.Cylinder("PlatformRing", env, new Vector3(0f, -0.09f, 2f), 22.6f, 0.05f, MaterialLibrary.Emissive(Color.black, UIFactory.Accent, 2f));
             PrimitiveFactory.SetShadowCasting(ring, false, false);
             var rng = new System.Random(42);
             for (int i = 0; i < 24; i++)
@@ -108,7 +109,8 @@ namespace VortexKarts.UI
             var sign = PrimitiveFactory.Box("TitleSign", env, new Vector3(0f, 6.5f, 14f), new Vector3(10f, 2.2f, 0.3f),
                 MaterialLibrary.Emissive(Color.black, UIFactory.Accent2, 1.5f));
             PrimitiveFactory.SetShadowCasting(sign, false, false);
-            var titleCanvas = UIFactory.CreateWorldCanvas("TitleCanvas", env, new Vector3(0f, 6.5f, 13.8f), Quaternion.Euler(0f, 180f, 0f),
+            // Canvas forward must point away from the viewer (who looks along +Z) or the text renders mirrored.
+            var titleCanvas = UIFactory.CreateWorldCanvas("TitleCanvas", env, new Vector3(0f, 6.5f, 13.8f), Quaternion.identity,
                 new Vector2(1000f, 220f), 0.01f);
             UIFactory.Label(titleCanvas.transform, "VORTEX KARTS", Vector2.zero, new Vector2(1000f, 220f), 150, Color.white, TextAnchor.MiddleCenter, FontStyle.Bold);
         }

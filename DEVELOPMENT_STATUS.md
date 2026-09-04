@@ -6,7 +6,11 @@ Fuente de verdad del estado del proyecto. Actualizado: 2026-09-03.
 
 - Unity 6000.0.83f1 instalado en `C:\Program Files\Unity\Hub\Editor\6000.0.83f1` (2026-09-03). El proyecto **compila sin errores** y el setup (URP, OpenXR con 6 perfiles, capas, datos, escenas) corrió correctamente.
 - Build Windows de desarrollo verificado: `Builds/Dev/VortexKartsVR.exe` (menú `Vortex Karts > Build`, o `-executeMethod VortexKarts.EditorTools.KartVRBuild.BuildWindowsDev`).
-- Verificación automatizada sin visor (modo escritorio): `VortexKartsVR.exe -autorace neon_metro -autopilot -topdown 120 -screenshots 30,100 -quitafter 300`. El piloto automático completó las 3 vueltas de Metro Neón: **2º de 8, 3:44, mejor vuelta 71,1 s**, cero excepciones, récord guardado en `records.json`.
+- Verificación automatizada sin visor (modo escritorio): `VortexKartsVR.exe -autorace <track> -autopilot -topdown 120 -screenshots 30,100 -quitafter 300`. El piloto automático completó las 3 vueltas en los tres circuitos, cero excepciones, récords guardados:
+  - Metro Neón: 2º de 8, 3:44, mejor vuelta **71,1 s** (objetivo 60–80).
+  - Cañón Solar: 2º de 8, 5:02, mejor vuelta **98,8 s** (objetivo 70–100), usando la mina en cada vuelta.
+  - Sky Lab: 7º de 8, 4:54, mejor vuelta **89,6 s** (objetivo ~80; una caída desde una plataforma sin barandas).
+- Menú principal verificado por captura (JUGAR / CONFIGURACIÓN / SALIR con kart de exhibición).
 - Hooks de línea de comandos: `-autorace <trackId>`, `-autopilot`, `-topdown [altura]`, `-screenshots s1,s2`, `-quitafter s`. Telemetría `[Telemetry]` cada 5 s en el log con `-autopilot`.
 - Todavía **no probado con headset** (esta PC no tiene runtime OpenXR): el juego detecta la ausencia y cae en modo escritorio correctamente.
 

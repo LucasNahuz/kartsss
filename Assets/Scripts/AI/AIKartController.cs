@@ -304,7 +304,10 @@ namespace VortexKarts.AI
             float desired = Mathf.Min(targetNode.RecommendedSpeed, track.GetNodeAhead(node, Mathf.Max(1, steps / 2)).RecommendedSpeed) * cornerFactor;
             if (node.IsGap || targetNode.IsGap || node.Has(TrackPointFlags.BoostZone)) desired = 999f;
             float cap = kart.Stats.maxSpeed * difficulty.topSpeedFactor * RubberBand();
-            if (kart.HasFinished) cap = kart.Stats.maxSpeed * 0.45f; // parade lap
+            if (kart.HasFinished && !(node.IsGap || targetNode.IsGap || track.GetNodeAhead(node, steps * 2).IsGap))
+            {
+                cap = kart.Stats.maxSpeed * 0.55f; // parade lap (full speed only to clear jumps)
+            }
             desired = Mathf.Min(desired, cap);
 
             if (speed > desired * 1.06f && kart.IsGrounded)
