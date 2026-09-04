@@ -503,8 +503,8 @@ namespace VortexKarts.Data
                     aiSpeedFraction = 0.7f,
                     waypoints = new List<Vector3>
                     {
-                        new Vector3(-205f, 4f, 225f),
-                        new Vector3(-195f, 3f, 150f),
+                        new Vector3(-207f, 6f, 228f),
+                        new Vector3(-197f, 4f, 150f),
                         new Vector3(-155f, 4f, 80f),
                         new Vector3(-100f, 6f, 38f)
                     }

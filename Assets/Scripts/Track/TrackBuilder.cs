@@ -262,11 +262,14 @@ namespace VortexKarts.Track
                         // Shortcut lane entirely inside the main lane: no geometry at all (the main road is the floor).
                         n.SkipMesh = true;
                         n.Flags |= TrackPointFlags.NoWalls;
+                        n.Position.y = closest.Position.y;
                     }
-                    else if (lateral < closest.Width * 0.5f + 0.8f)
+                    else if (lateral < closest.Width * 0.5f + n.Width * 0.5f + 0.5f)
                     {
-                        // Partially overlapping: keep the floor, drop the walls (they would cut across the main lane).
+                        // Partially overlapping: keep the floor but make it coplanar with the main road (no lip), drop walls.
                         n.Flags |= TrackPointFlags.NoWalls;
+                        float blend = Mathf.InverseLerp(closest.Width * 0.5f + n.Width * 0.5f + 0.5f, closest.Width * 0.5f - n.Width * 0.5f, lateral);
+                        n.Position.y = Mathf.Lerp(n.Position.y, closest.Position.y, Mathf.Clamp01(blend));
                     }
                     else if (lateral < closest.Width * 0.5f + n.Width * 0.5f + 2.5f)
                     {
@@ -283,6 +286,9 @@ namespace VortexKarts.Track
                         }
                     }
                 }
+
+                // Heights changed near the junctions: refresh the shortcut frames.
+                ComputeFrames(list, false);
 
                 // Main road: open the wall on the branch side around entry and exit.
                 OpenMainWall(mainNodes, list[0], list[Mathf.Min(4, list.Count - 1)], length, -10f, 26f);

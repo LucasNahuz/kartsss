@@ -142,8 +142,8 @@ MonoBehaviour:
     entryPointIndex: 27
     exitPointIndex: 32
     waypoints:
-    - {x: -205, y: 4, z: 225}
-    - {x: -195, y: 3, z: 150}
+    - {x: -207, y: 6, z: 228}
+    - {x: -197, y: 4, z: 150}
     - {x: -155, y: 4, z: 80}
     - {x: -100, y: 6, z: 38}
     width: 6.5
